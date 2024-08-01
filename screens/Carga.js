@@ -1,41 +1,99 @@
-import { StatusBar } from 'expo-status-bar';
-import { Button, StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import Modal from 'react-native-modal';
 
-export default function Carga({navigation}) {
+const CardModal = () => {
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
+  const handleSave = () => {
+    // Aquí puedes manejar la lógica para guardar la información
+    console.log('Name:', name);
+    console.log('Description:', description);
+    toggleModal();
+  };
+
   return (
     <View style={styles.container}>
+      <Button title="Show Modal" onPress={toggleModal} />
 
-    <View style={styles.overlay}>
+      <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={toggleModal}
+        backdropOpacity={0.5}
+        style={styles.modal}
+      >
+        <View style={styles.card}>
+          <Text style={styles.title}>Enter Information</Text>
 
-    
-        <Text>Tarea</Text>
-       
-      
-        
-    
-    </View>
-      
+          <TextInput
+            style={styles.input}
+            placeholder="Name"
+            value={name}
+            onChangeText={setName}
+          />
+
+          <TextInput 
+            style={styles.input}
+            placeholder="Brief Description"
+            value={description}
+            onChangeText={setDescription}
+            multiline
+          />
+
+          <View style={styles.buttonContainer}>
+            <Button title="Save" onPress={handleSave} />
+            <Button title="Cancel" onPress={toggleModal} color="red" />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
-}
+};
+
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparente para el fondo
-    },
-    modal: {
-      backgroundColor: '#fff',
-      width: 600,
-      maxWidth: '100%',
-      padding: 30,
-      borderRadius: 5,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.2,
-      shadowRadius: 4,
-      elevation: 4, // Elevación para Android
-      alignItems: 'center',
-    },
-  });
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modal: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  card: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    width: '80%',
+    maxWidth: 400,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  input: {
+    height: 40,
+    borderColor: '#ddd',
+    borderBottomWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+});
+
+export default CardModal;
